@@ -1,5 +1,5 @@
 const WebSocket = require("ws");
-const Message = require('./models/message')
+// const Message = require('./models/message')
 
 const clients = [];
 const messages = [];
@@ -19,18 +19,20 @@ const wsConnection = (server) => {
         ts: Date.now()
       }
 
-      // messages.push(msg);
-      Message.create(msg).then((result) =>{
+      messages.push(msg);
+      sendMessages();
+      /* Message.create(msg).then((result) =>{
         sendMessages();
         cont++;
-      })
+      }) */
     });
   });
 
   const sendMessages = () => {
-    Message.findAll().then((result) => {
+    clients.forEach((client) => client.send(JSON.stringify(messages)));
+    /* Message.findAll().then((result) => {
       clients.forEach((client) => client.send(JSON.stringify(result)));
-    })
+    }) */
   };
 };
 
